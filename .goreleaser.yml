@@ -1,8 +1,8 @@
 before:
   hooks:
     - go mod tidy
-gomod:
-  proxy: true
+# gomod:
+#   proxy: true
 builds:
   - goarch:
       - amd64
