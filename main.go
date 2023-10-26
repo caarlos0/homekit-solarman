@@ -21,7 +21,7 @@ import (
 type Config struct {
 	AppID      string `env:"APP_ID,required"`
 	AppSecret  string `env:"APP_SECRET,required"`
-	Username   string `env:"USERNAME,required"`
+	Email      string `env:"EMAIL,required"`
 	Password   string `env:"PASSWORD,required"`
 	InverterSN string `env:"SN,required"`
 }
@@ -37,7 +37,7 @@ func main() {
 	cli, err := solarman.New(
 		cfg.AppID,
 		cfg.AppSecret,
-		cfg.Username,
+		cfg.Email,
 		cfg.Password,
 	)
 	if err != nil {

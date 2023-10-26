@@ -5,7 +5,7 @@ go 1.21.1
 require (
 	github.com/brutella/hap v0.0.27
 	github.com/caarlos0/env/v9 v9.0.0
-	github.com/caarlos0/go-solarman v0.1.0
+	github.com/caarlos0/go-solarman v0.1.1
 	github.com/charmbracelet/log v0.2.5
 )
 
