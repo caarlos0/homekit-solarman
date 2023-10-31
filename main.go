@@ -44,20 +44,8 @@ func main() {
 		log.Fatal("failed to create client", "err", err)
 	}
 
-	bridge := accessory.NewBridge(accessory.Info{
-		Name: "Solarman Bridge",
-	})
-
 	inverter := NewInverterSensor(accessory.Info{
-		Name: "Inverter",
-	})
-
-	daily := NewProduction(accessory.Info{
-		Name: "Daily kWh",
-	})
-
-	cumulative := NewProduction(accessory.Info{
-		Name: "Cumulative kWh",
+		Name: "Solarman Inverter",
 	})
 
 	updateSensors := func() {
@@ -81,9 +69,6 @@ func main() {
 
 		inverter.Light.CurrentAmbientLightLevel.SetMaxValue(rated)
 		inverter.Light.CurrentAmbientLightLevel.SetValue(output)
-
-		daily.Light.CurrentAmbientLightLevel.SetValue(get(data, "Etdy_ge1"))
-		cumulative.Light.CurrentAmbientLightLevel.SetValue(get(data, "Et_ge0"))
 	}
 
 	go func() {
@@ -94,7 +79,7 @@ func main() {
 		}
 	}()
 
-	server, err := hap.NewServer(fs, bridge.A, inverter.A, daily.A, cumulative.A)
+	server, err := hap.NewServer(fs, inverter.A)
 	if err != nil {
 		log.Fatal("fail to start server", "error", err)
 	}

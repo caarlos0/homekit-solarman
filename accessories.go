@@ -27,18 +27,3 @@ func NewInverterSensor(info accessory.Info) *Inverter {
 
 	return &a
 }
-
-type Production struct {
-	*accessory.A
-	Light *service.LightSensor
-}
-
-func NewProduction(info accessory.Info) *Production {
-	a := Production{}
-	a.A = accessory.New(info, accessory.TypeSensor)
-
-	a.Light = service.NewLightSensor()
-	a.AddS(a.Light.S)
-
-	return &a
-}
