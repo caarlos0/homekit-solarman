@@ -1,6 +1,6 @@
 module github.com/caarlos0/homekit-solarman
 
-go 1.24.0
+go 1.25.5
 
 require (
 	github.com/brutella/hap v0.0.35
