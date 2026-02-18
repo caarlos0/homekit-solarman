@@ -51,7 +51,8 @@ func main() {
 	updateSensors := func() {
 		data, err := cli.CurrentData(cfg.InverterSN)
 		if err != nil {
-			log.Fatal("failed to get initial data", "err", err)
+			log.Error("failed to get data", "err", err)
+			return
 		}
 
 		inverter.Temperature.CurrentTemperature.SetValue(get(data, "T_AC_RDT1"))
@@ -63,9 +64,11 @@ func main() {
 		} else {
 			_ = inverter.Battery.ChargingState.SetValue(characteristic.ChargingStateNotCharging)
 		}
-		_ = inverter.Battery.BatteryLevel.SetValue(
-			int(output*100) / int(rated),
-		)
+		if rated > 0 {
+			_ = inverter.Battery.BatteryLevel.SetValue(
+				int(output*100) / int(rated),
+			)
+		}
 
 		inverter.Light.CurrentAmbientLightLevel.SetMaxValue(rated)
 		inverter.Light.CurrentAmbientLightLevel.SetValue(output)
