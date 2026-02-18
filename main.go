@@ -19,11 +19,10 @@ import (
 )
 
 type Config struct {
-	AppID      string `env:"APP_ID,required"`
-	AppSecret  string `env:"APP_SECRET,required"`
-	Email      string `env:"EMAIL,required"`
-	Password   string `env:"PASSWORD,required"`
-	InverterSN string `env:"SN,required"`
+	AppID     string `env:"APP_ID,required"`
+	AppSecret string `env:"APP_SECRET,required"`
+	Email     string `env:"EMAIL,required"`
+	Password  string `env:"PASSWORD,required"`
 }
 
 func main() {
@@ -44,21 +43,34 @@ func main() {
 		log.Fatal("failed to create client", "err", err)
 	}
 
+	inverterDeviceID, err := findInverter(cli)
+	if err != nil {
+		log.Fatal("failed to find inverter", "err", err)
+	}
+
 	inverter := NewInverterSensor(accessory.Info{
 		Name: "Solarman Inverter",
 	})
 
 	updateSensors := func() {
-		data, err := cli.CurrentData(cfg.InverterSN)
+		data, err := cli.CurrentData(inverterDeviceID)
 		if err != nil {
 			log.Error("failed to get data", "err", err)
 			return
 		}
 
-		inverter.Temperature.CurrentTemperature.SetValue(get(data, "T_AC_RDT1"))
+		if !data.Success {
+			log.Error("API error", "msg", data.Msg, "code", data.Code)
+			return
+		}
 
+		temp := get(data, "T_AC_RDT1")
 		output := get(data, "APo_t1")
 		rated := get(data, "Pr1")
+		log.Info("sensors", "temp", temp, "output", output, "rated", rated)
+
+		inverter.Temperature.CurrentTemperature.SetValue(temp)
+
 		if output > 0 {
 			_ = inverter.Battery.ChargingState.SetValue(characteristic.ChargingStateCharging)
 		} else {
@@ -103,6 +115,30 @@ func main() {
 	if err := server.ListenAndServe(ctx); err != nil && !errors.Is(err, http.ErrServerClosed) {
 		log.Error("failed to close server", "err", err)
 	}
+}
+
+func findInverter(cli *solarman.Client) (int, error) {
+	stations, err := cli.Stations()
+	if err != nil {
+		return 0, err
+	}
+
+	for _, station := range stations {
+		log.Info("found station", "id", station.ID, "name", station.Name)
+		devices, err := cli.StationDevices(station.ID)
+		if err != nil {
+			log.Error("failed to list devices", "station", station.ID, "err", err)
+			continue
+		}
+		for _, device := range devices {
+			log.Info("found device", "id", device.DeviceID, "sn", device.DeviceSn, "type", device.DeviceType)
+			if device.DeviceType == "INVERTER" {
+				return device.DeviceID, nil
+			}
+		}
+	}
+
+	return 0, errors.New("no inverter found")
 }
 
 func get(data solarman.CurrentData, key string) float64 {

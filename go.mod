@@ -5,7 +5,7 @@ go 1.25.5
 require (
 	github.com/brutella/hap v0.0.35
 	github.com/caarlos0/env/v10 v10.0.0
-	github.com/caarlos0/go-solarman v0.1.3
+	github.com/caarlos0/go-solarman v0.1.4
 	github.com/charmbracelet/log v0.4.2
 )
 
@@ -34,7 +34,6 @@ require (
 	golang.org/x/exp v0.0.0-20231006140011-7918f672742d // indirect
 	golang.org/x/mod v0.29.0 // indirect
 	golang.org/x/net v0.47.0 // indirect
-	golang.org/x/oauth2 v0.34.0 // indirect
 	golang.org/x/sync v0.18.0 // indirect
 	golang.org/x/sys v0.38.0 // indirect
 	golang.org/x/text v0.31.0 // indirect
