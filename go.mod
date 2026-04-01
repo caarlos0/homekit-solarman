@@ -6,7 +6,7 @@ require (
 	github.com/brutella/hap v0.0.35
 	github.com/caarlos0/env/v10 v10.0.0
 	github.com/caarlos0/go-solarman v0.1.4
-	github.com/charmbracelet/log v0.4.2
+	github.com/charmbracelet/log v1.0.0
 )
 
 require (
@@ -18,7 +18,7 @@ require (
 	github.com/charmbracelet/x/cellbuf v0.0.13-0.20250311204145-2c3ea96c31dd // indirect
 	github.com/charmbracelet/x/term v0.2.1 // indirect
 	github.com/go-chi/chi v1.5.4 // indirect
-	github.com/go-logfmt/logfmt v0.6.0 // indirect
+	github.com/go-logfmt/logfmt v0.6.1 // indirect
 	github.com/lucasb-eyer/go-colorful v1.2.0 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/mattn/go-runewidth v0.0.16 // indirect
